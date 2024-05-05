@@ -1,0 +1,8 @@
+building,r1_building,r1_level,r2_building,r2_level,r3_building,r3_level
+Stalla,Quartier_generale,10,Caserma,5,Fabbro,5
+Accademia,Quartier_generale,20,Fabbro,20,Mercato,10
+Caserma,Quartier_generale,3
+Officina,Quartier_generale,10,Fabbro,10
+Fabbro,Quartier_generale,5,Caserma,1
+Mercato,Quartier_generale,3,Magazzino,2
+Mura,Caserma,1
