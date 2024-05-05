@@ -44,6 +44,8 @@ exports.getBuilding = function (level,name){
   });
 }
 
+
+
 //GET TROOP INFO
 exports.getTroop = function (name){
   var query ="select * from Unit WHERE Name='"+name+"';"

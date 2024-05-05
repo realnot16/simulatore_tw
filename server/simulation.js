@@ -27,7 +27,17 @@ const gain={
 }
 var village
 
+var template=[
+    "quartier_generale",
+    "taglialegna",
+    "pozzo_di_argilla",
+    "magazzino",
+    "fattoria",
+    "quartier_generale",
+    "caserma"
+]
 
+var h
 
 exports.startSim = async function () {
 
@@ -35,24 +45,24 @@ exports.startSim = async function () {
 
     //init village
     village={
-        Quartier_generale: 1,
-        Caserma: 0,
-        Stalla: 0,
-        Officina: 0,
-        Accademia: 0,
-        Fabbro: 0,
-        Mercato: 0,
-        Taglialegna: 0,
-        Pozzo_di_argilla: 0,
-        Miniera_di_ferro: 0,
-        Fattoria: 1,
-        Magazzino: 1,
-        Nascondiglio: 1,
-        Mura: 0,
-        Statua: 0,
-        timber: 900,
-        clay: 900,
-        iron: 900,
+        quartier_generale: 1,
+        caserma: 0,
+        stalla: 0,
+        officina: 0,
+        accademia: 0,
+        fabbro: 0,
+        mercato: 0,
+        taglialegna: 0,
+        pozzo_di_argilla: 0,
+        miniera_di_ferro: 0,
+        fattoria: 1,
+        magazzino: 1,
+        nascondiglio: 1,
+        mura: 0,
+        statua: 0,
+        legno: 900,
+        argilla: 900,
+        ferro: 900,
         pop: 7,
         pop_max:240,
         space:1000,
@@ -64,9 +74,26 @@ exports.startSim = async function () {
         hc:0,
         ram:0,
         cata:0,
-        noble:0
+        noble:0,
+        slot: 0
     }
 
+    var time=0
+
+    while(time<(60*24*3)){
+        //PRODUCTION
+        
+        console.log("before")
+        console.log(village)
+        production(village)
+        console.log("after")
+        console.log(village)
+
+
+        
+        //checkBuilding(village)
+    }
+    
 
     // simEnd=false
     // while(simEnd){
@@ -86,12 +113,80 @@ exports.startSim = async function () {
         
     // }
 
-    addBuilding()
+    
+
+}
+
+
+function production(village){
+    console.log("HERE-----------------------")
+    console.log(village)
+    village.legno += getResource(village.taglialegna,village.spear,village.lc,village.slot)
+
+    return village
+
+    function getResource(level,spear,lc,slot){
+        var res_mine
+        if(level>0){
+            res_mine = wspeed*30*(1,163118)**(level-1)
+        }
+        else {
+            res_mine = 25
+        }
+                    
+        console.log("miniere producono "+res_mine)
+        var res_spear
+        iRatio1=0.10
+        iRatio2=0.10
+        iRatio3=0.10
+        iRatio4=0.80
+        df= wspeed**(-0.55) 
+        switch(slot) {
+            case 0:
+                res_spear=0
+            // code block
+              break;
+            case 1:
+                iCap=40*spear
+                res_spear = iCap * iRatio / ((Math.pow(Math.pow(iCap, 2) * 100 * Math.pow(iRatio, 2), 0.45) + 1800) * df)
+                // code block
+              break;
+            case 2:
+                iCap1= 40*(10/14)*spear
+                iCap2= 40*(4/14)*spear
+                res_spear = iCap1 * iRatio1 / ((Math.pow(Math.pow(iCap1, 2) * 100 * Math.pow(iRatio1, 2), 0.45) + 1800) * df)
+                res_spear += iCap2 * iRatio2 / ((Math.pow(Math.pow(iCap2, 2) * 100 * Math.pow(iRatio2, 2), 0.45) + 1800) * df)
+            // code block
+                break;
+            case 3:
+                iCap1= 40*(4/14)*spear
+                iCap2= 40*(4/14)*spear
+                iCap3= 40*(4/14)*spear
+                res_spear = iCap1 * iRatio1 / ((Math.pow(Math.pow(iCap1, 2) * 100 * Math.pow(iRatio1, 2), 0.45) + 1800) * df)
+                res_spear += iCap2 * iRatio2 / ((Math.pow(Math.pow(iCap2, 2) * 100 * Math.pow(iRatio2, 2), 0.45) + 1800) * df)
+                res_spear += iCap3 * iRatio3 / ((Math.pow(Math.pow(iCap3, 2) * 100 * Math.pow(iRatio3, 2), 0.45) + 1800) * df)
+            // code block
+                 break;
+            case 4:
+                iCap1= 40*(4/14)*spear
+                iCap2= 40*(4/14)*spear
+                iCap3= 40*(4/14)*spear
+                res_spear = iCap1 * iRatio1 / ((Math.pow(Math.pow(iCap1, 2) * 100 * Math.pow(iRatio1, 2), 0.45) + 1800) * df)
+                res_spear += iCap2 * iRatio2 / ((Math.pow(Math.pow(iCap2, 2) * 100 * Math.pow(iRatio2, 2), 0.45) + 1800) * df)
+                res_spear += iCap3 * iRatio3 / ((Math.pow(Math.pow(iCap3, 2) * 100 * Math.pow(iRatio3, 2), 0.45) + 1800) * df)
+                res_spear += iCap4 * iRatio4 / ((Math.pow(Math.pow(iCap4, 2) * 100 * Math.pow(iRatio4, 2), 0.45) + 1800) * df)
+                // code block
+                break;
+
+          }
+        console.log("rov produce: "+res_spear)
+        var resTot = (res_mine+res_spear )/60
+        return resTot
+    }
 
 }
 
 function addBuilding() {
-    console.log(barracksValue())
 }
 
 //GIVING RESOURCES AND PRIORITY, RETURN THE BEST BUILDING TO BUILD
@@ -107,6 +202,14 @@ function evalSim(key,village,targetVillage){
         return false
 }
 
+
+
+
+
+
+
+
+
 //GETS VALUE OF BUILDING BARRACK
  async function barracksValue (){
     level=village.Caserma
@@ -116,12 +219,18 @@ function evalSim(key,village,targetVillage){
 
     
     var spearRec_time=parseFloat(binfo.factor.replace(",","."))*parseInt(tinfo.Base_recruiting_time)/wspeed
+    //number of new spear with the level of barracks
     var nSpear =3600/spearRec_time -3600/(parseFloat(binfoLow.factor.replace(",","."))*parseInt(tinfo.Base_recruiting_time)/wspeed)
-    var spearCost = (tinfo.Wood+tinfo.Clay+tinfo.Iron)*nSpear
+
+    var spearCost = (tinfo.Wood+tinfo.Clay+tinfo.Iron)
     var buildingCost = binfo.Wood+binfo.Clay+binfo.Iron
-    var totalCost =spearCost+buildingCost
+    //building cost + 
+    var totalCost =spearCost*nSpear*(gain.spear_value_over_time+buildingCost)
     var spearGain = gain.spear*nSpear
     
+
+
+
     var value= spearGain/totalCost
 
     //dato il tempo di valore di una lancia, sommo il gain per ogni ora e divido per costo totale
